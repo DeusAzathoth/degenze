@@ -1,5 +1,7 @@
-package org.cthulhu.azathoth.domains;
+package org.cthulhu.azathoth.bootstrap;
 
+import org.cthulhu.azathoth.domains.Block;
+import org.cthulhu.azathoth.domains.Slot;
 import org.cthulhu.azathoth.repositories.BlockRepository;
 import org.cthulhu.azathoth.repositories.SlotRepository;
 import org.springframework.boot.CommandLineRunner;
