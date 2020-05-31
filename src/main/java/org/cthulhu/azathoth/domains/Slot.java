@@ -10,7 +10,7 @@ public class Slot {
     private Long id;
 
     private String name;
-    private int row;
+    private int level;
     private boolean busy;
     private boolean ready;
 
@@ -19,9 +19,10 @@ public class Slot {
 
     public Slot() {}
 
-    public Slot(String name, int row, boolean busy, boolean ready) {
+    public Slot(String name, int level, boolean busy, boolean ready) {
+    //public Slot(String name, boolean busy, boolean ready) {
         this.name = name;
-        this.row = row;
+        this.level = level;
         this.busy = busy;
         this.ready = ready;
     }
@@ -42,12 +43,12 @@ public class Slot {
         this.name = name;
     }
 
-    public int getRow() {
-        return row;
+    public int getLevel() {
+        return level;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public boolean isBusy() {
@@ -93,7 +94,7 @@ public class Slot {
     public String toString() {
         return "Slot{" +
                 "name='" + name + '\'' +
-                ", row=" + row +
+                ", level=" + level +
                 '}';
     }
 }

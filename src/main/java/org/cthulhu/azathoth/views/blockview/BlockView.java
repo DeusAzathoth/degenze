@@ -64,7 +64,7 @@ public class BlockView extends VerticalLayout implements HasUrlParameter<String>
 
         List<Slot> slotList = foundedBlock.getSlots();
 
-        slotList.forEach(slot -> {
+        /*slotList.forEach(slot -> {
             if (slot.getRow() == 1) {
                 //row1.add(new SingleSlot(slot));
             } else if (slot.getRow() == 2) {
@@ -72,7 +72,7 @@ public class BlockView extends VerticalLayout implements HasUrlParameter<String>
             } else {
                 System.out.println("Slot non appartenente al layout");
             }
-        });
+        });*/
 
         add(row1, row2);
 
