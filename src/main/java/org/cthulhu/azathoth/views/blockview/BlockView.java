@@ -2,9 +2,7 @@ package org.cthulhu.azathoth.views.blockview;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import org.cthulhu.azathoth.MainView;
 import org.cthulhu.azathoth.domains.Block;
 import org.cthulhu.azathoth.domains.Slot;
@@ -64,15 +62,15 @@ public class BlockView extends VerticalLayout implements HasUrlParameter<String>
 
         List<Slot> slotList = foundedBlock.getSlots();
 
-        /*slotList.forEach(slot -> {
-            if (slot.getRow() == 1) {
-                //row1.add(new SingleSlot(slot));
-            } else if (slot.getRow() == 2) {
-                //row2.add(new SingleSlot(slot));
+        slotList.forEach(slot -> {
+            if (slot.getLevel() == 1) {
+                row1.add(new SingleSlot(slot));
+            } else if (slot.getLevel() == 2) {
+                row2.add(new SingleSlot(slot));
             } else {
                 System.out.println("Slot non appartenente al layout");
             }
-        });*/
+        });
 
         add(row1, row2);
 
@@ -82,7 +80,11 @@ public class BlockView extends VerticalLayout implements HasUrlParameter<String>
     }
 
     @Override
-    public void setParameter(BeforeEvent beforeEvent, String s) {
+    public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String s) {
+
+        Location location = beforeEvent.getLocation();
+        QueryParameters queryParameters = location.getQueryParameters();
+        Map<String, List<String>> parametersMap = queryParameters.getParameters();
 
     }
 

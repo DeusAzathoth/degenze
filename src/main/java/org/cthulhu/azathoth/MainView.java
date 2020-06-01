@@ -49,6 +49,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
 
         // Add Tabs and Views
         blockRepository.findAll().forEach(block -> {
+            System.out.println("Block: " + block.getName());
             addMenuTab(block.getName(), BlockView.class, block.getId());
         });
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
