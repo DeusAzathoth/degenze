@@ -4,7 +4,13 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.QueryParameters;
 import org.cthulhu.azathoth.domains.Slot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SingleSlot extends VerticalLayout {
 
@@ -22,7 +28,11 @@ public class SingleSlot extends VerticalLayout {
             System.out.println("Enter button pushed");
             if (enter.getUI().isPresent()) {
                 UI ui = enter.getUI().get();
-                //ui.navigate(org.cthulhu.azathoth.views.slotview.SlotView.class, "block=1&slot=1");
+                Map<String, List<String>> parameters = new HashMap<>();
+                List<String> slotParameters = new ArrayList<>();
+                slotParameters.add(slot.getId().toString());
+                parameters.put("slot", slotParameters);
+                ui.navigate("slot", new QueryParameters(parameters));
             }
         });
 

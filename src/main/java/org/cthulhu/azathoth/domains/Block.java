@@ -1,5 +1,7 @@
 package org.cthulhu.azathoth.domains;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ public class Block {
     private String position;
     private String layout;
 
-    @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Slot> slots = new ArrayList<>();
 
     public Block() {}
