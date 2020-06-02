@@ -1,8 +1,12 @@
 package org.cthulhu.azathoth.bootstrap;
 
 import org.cthulhu.azathoth.domains.Block;
+import org.cthulhu.azathoth.domains.Owner;
+import org.cthulhu.azathoth.domains.Pet;
 import org.cthulhu.azathoth.domains.Slot;
 import org.cthulhu.azathoth.repositories.BlockRepository;
+import org.cthulhu.azathoth.repositories.OwnerRepository;
+import org.cthulhu.azathoth.repositories.PetRepository;
 import org.cthulhu.azathoth.repositories.SlotRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -12,10 +16,15 @@ public class BootstrapData implements CommandLineRunner {
 
     private final BlockRepository blockRepository;
     private final SlotRepository slotRepository;
+    private final PetRepository petRepository;
+    private final OwnerRepository ownerRepository;
 
-    public BootstrapData(BlockRepository blockRepository, SlotRepository slotRepository) {
+    public BootstrapData(BlockRepository blockRepository, SlotRepository slotRepository,
+                         PetRepository petRepository, OwnerRepository ownerRepository) {
         this.blockRepository = blockRepository;
         this.slotRepository = slotRepository;
+        this.petRepository = petRepository;
+        this.ownerRepository = ownerRepository;
     }
 
     @Override
@@ -58,6 +67,19 @@ public class BootstrapData implements CommandLineRunner {
         // Block 2
         Block block2 = new Block("Block 2", "Degenza", "3x2");
         blockRepository.save(block2);
+
+        // Pet 1
+        Pet pet1 = new Pet("Tiffany", "Cane", "Barbone", "5",
+                "Femmina", false, 5.0f, "");
+        petRepository.save(pet1);
+        Owner owner1 = new Owner("Lorenzon", "Serena", "000000", "");
+        owner1.setPet(pet1);
+        ownerRepository.save(owner1);
+        pet1.setOwner(owner1);
+        a1.setPet(pet1);
+        slotRepository.save(a1);
+        pet1.setSlot(a1);
+        petRepository.save(pet1);
 
     }
 }

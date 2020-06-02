@@ -17,6 +17,9 @@ public class Slot {
     @ManyToOne
     private Block block;
 
+    @OneToOne
+    private Pet pet;
+
     public Slot() {}
 
     public Slot(String name, int level, boolean busy, boolean ready) {
@@ -73,6 +76,14 @@ public class Slot {
 
     public void setBlock(Block block) {
         this.block = block;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 
     @Override

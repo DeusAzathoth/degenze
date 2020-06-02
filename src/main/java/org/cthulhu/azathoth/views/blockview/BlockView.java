@@ -18,10 +18,9 @@ import java.util.Optional;
 public class BlockView extends VerticalLayout implements HasUrlParameter<String> {
 
     private Map<String, List<String>> parametersMap;
+
     @Autowired private BlockRepository blockRepository;
-
     private Block foundedBlock;
-
     Optional<Block> block;
 
     public BlockView() {
@@ -101,16 +100,6 @@ public class BlockView extends VerticalLayout implements HasUrlParameter<String>
         parametersMap = queryParameters.getParameters();
 
         buildView();
-
-        if (parametersMap != null) {
-            List<String> l = parametersMap.get("block");
-            String block_id_s = l.get(0);
-            System.out.println("Ricerco il blocco numero: " + block_id_s);
-            Long block_id = Long.parseLong(block_id_s);
-            block = blockRepository.findById(block_id);
-        } else {
-            System.out.println("ParamatersMap null");
-        }
 
     }
 

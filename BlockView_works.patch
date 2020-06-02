@@ -1,0 +1,179 @@
+Index: src/main/java/org/cthulhu/azathoth/domains/Block.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/cthulhu/azathoth/domains/Block.java	(revision eb66c0195ebaa7a8d967eddd27423797051d4412)
++++ src/main/java/org/cthulhu/azathoth/domains/Block.java	(date 1591048549000)
+@@ -1,5 +1,7 @@
+ package org.cthulhu.azathoth.domains;
+ 
++import org.springframework.transaction.annotation.Transactional;
++
+ import javax.persistence.*;
+ import java.util.ArrayList;
+ import java.util.List;
+@@ -15,7 +17,7 @@
+     private String position;
+     private String layout;
+ 
+-    @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, orphanRemoval = true)
++    @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+     private List<Slot> slots = new ArrayList<>();
+ 
+     public Block() {}
+Index: src/main/java/org/cthulhu/azathoth/views/blockview/SingleSlot.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/cthulhu/azathoth/views/blockview/SingleSlot.java	(revision eb66c0195ebaa7a8d967eddd27423797051d4412)
++++ src/main/java/org/cthulhu/azathoth/views/blockview/SingleSlot.java	(date 1591008612000)
+@@ -4,8 +4,14 @@
+ import com.vaadin.flow.component.button.Button;
+ import com.vaadin.flow.component.html.Label;
+ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
++import com.vaadin.flow.router.QueryParameters;
+ import org.cthulhu.azathoth.domains.Slot;
+ 
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
+ public class SingleSlot extends VerticalLayout {
+ 
+     public SingleSlot(Slot slot) {
+@@ -22,7 +28,11 @@
+             System.out.println("Enter button pushed");
+             if (enter.getUI().isPresent()) {
+                 UI ui = enter.getUI().get();
+-                //ui.navigate(org.cthulhu.azathoth.views.slotview.SlotView.class, "block=1&slot=1");
++                Map<String, List<String>> parameters = new HashMap<>();
++                List<String> slotParameters = new ArrayList<>();
++                slotParameters.add(slot.getId().toString());
++                parameters.put("slot", slotParameters);
++                ui.navigate("slot", new QueryParameters(parameters));
+             }
+         });
+ 
+Index: src/main/java/org/cthulhu/azathoth/views/blockview/BlockView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/cthulhu/azathoth/views/blockview/BlockView.java	(revision eb66c0195ebaa7a8d967eddd27423797051d4412)
++++ src/main/java/org/cthulhu/azathoth/views/blockview/BlockView.java	(date 1591047826000)
+@@ -1,5 +1,6 @@
+ package org.cthulhu.azathoth.views.blockview;
+ 
++import com.vaadin.flow.component.html.Label;
+ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+ import com.vaadin.flow.router.*;
+@@ -7,6 +8,7 @@
+ import org.cthulhu.azathoth.domains.Block;
+ import org.cthulhu.azathoth.domains.Slot;
+ import org.cthulhu.azathoth.repositories.BlockRepository;
++import org.springframework.beans.factory.annotation.Autowired;
+ 
+ import java.util.List;
+ import java.util.Map;
+@@ -15,8 +17,8 @@
+ @Route(value = "block", layout = MainView.class)
+ public class BlockView extends VerticalLayout implements HasUrlParameter<String> {
+ 
+-    private Map<String, List<String>> parametersMap = null;
+-    private BlockRepository blockRepository;
++    private Map<String, List<String>> parametersMap;
++    @Autowired private BlockRepository blockRepository;
+ 
+     private Block foundedBlock;
+ 
+@@ -26,27 +28,6 @@
+ 
+         System.out.println("BlockView");
+ 
+-        if (parametersMap != null) {
+-            List<String> l = parametersMap.get("block");
+-            String block_id_s = l.get(0);
+-            System.out.println("Ricerco il blocco numero: " + block_id_s);
+-            Long block_id = Long.parseLong(block_id_s);
+-            block = blockRepository.findById(block_id);
+-        }
+-
+-        if (block.isPresent()) {
+-            System.out.println("Blocco esistente nel database");
+-            foundedBlock = block.get();
+-            System.out.println("Layout: " + foundedBlock.getLayout());
+-            if (foundedBlock.getLayout().equalsIgnoreCase("3x2")) {
+-                create3x2();
+-            } else {
+-                System.out.println("Questo blocco non ha un layout");
+-            }
+-        } else {
+-            System.out.println("Questo blocco non esiste nel database");
+-        }
+-
+     }
+ 
+     private void create3x2() {
+@@ -79,12 +60,57 @@
+ 
+     }
+ 
++    private void buildView() {
++
++        System.out.println("Building Block View");
++
++        if (parametersMap != null) {
++            List<String> l = parametersMap.get("block");
++            String block_id_s = l.get(0);
++            System.out.println("Ricerco il blocco numero: " + block_id_s);
++            Long block_id = Long.parseLong(block_id_s);
++            block = blockRepository.findById(block_id);
++        } else {
++            System.out.println("ParamatersMap null");
++            add(new Label("Parametri non riconosciuti"));
++        }
++
++        if (block.isPresent()) {
++            System.out.println("Blocco esistente nel database");
++            foundedBlock = block.get();
++            System.out.println("Layout: " + foundedBlock.getLayout());
++            if (foundedBlock.getLayout().equalsIgnoreCase("3x2")) {
++                create3x2();
++            } else {
++                System.out.println("Questo blocco non ha un layout");
++                add(new Label("Nessun Layout selezionato"));
++            }
++        } else {
++            System.out.println("Questo blocco non esiste nel database");
++            add(new Label("Non esiste il blocco nel database"));
++        }
++
++    }
++
+     @Override
+     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String s) {
+ 
++        System.out.println("Ricerco i parametri");
+         Location location = beforeEvent.getLocation();
+         QueryParameters queryParameters = location.getQueryParameters();
+-        Map<String, List<String>> parametersMap = queryParameters.getParameters();
++        parametersMap = queryParameters.getParameters();
++
++        buildView();
++
++        if (parametersMap != null) {
++            List<String> l = parametersMap.get("block");
++            String block_id_s = l.get(0);
++            System.out.println("Ricerco il blocco numero: " + block_id_s);
++            Long block_id = Long.parseLong(block_id_s);
++            block = blockRepository.findById(block_id);
++        } else {
++            System.out.println("ParamatersMap null");
++        }
+ 
+     }
+ 
