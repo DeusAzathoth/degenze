@@ -1,6 +1,8 @@
 package org.cthulhu.azathoth.domains;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Slot {
@@ -19,6 +21,9 @@ public class Slot {
 
     @OneToOne
     private Pet pet;
+
+    @OneToMany(mappedBy = "slot", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Folder> folders = new ArrayList<>();
 
     public Slot() {}
 
@@ -84,6 +89,14 @@ public class Slot {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public List<Folder> getFolders() {
+        return folders;
+    }
+
+    public void setFolders(List<Folder> folders) {
+        this.folders = folders;
     }
 
     @Override

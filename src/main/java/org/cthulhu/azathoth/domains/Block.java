@@ -20,6 +20,9 @@ public class Block {
     @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Slot> slots = new ArrayList<>();
 
+    @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Folder> folders = new ArrayList<>();
+
     public Block() {}
 
     public Block(String name, String position, String layout) {
@@ -66,6 +69,14 @@ public class Block {
 
     public void setSlots(List<Slot> slots) {
         this.slots = slots;
+    }
+
+    public List<Folder> getFolders() {
+        return folders;
+    }
+
+    public void setFolders(List<Folder> folders) {
+        this.folders = folders;
     }
 
     @Override

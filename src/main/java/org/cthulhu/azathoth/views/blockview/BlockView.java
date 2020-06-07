@@ -44,9 +44,13 @@ public class BlockView extends VerticalLayout implements HasUrlParameter<String>
 
         slotList.forEach(slot -> {
             if (slot.getLevel() == 1) {
-                row1.add(new SingleSlot(slot));
+                SingleSlot ss = new SingleSlot();
+                ss.setSlot(slot);
+                row1.add(ss);
             } else if (slot.getLevel() == 2) {
-                row2.add(new SingleSlot(slot));
+                SingleSlot ss = new SingleSlot();
+                ss.setSlot(slot);
+                row2.add(ss);
             } else {
                 System.out.println("Slot non appartenente al layout");
             }
