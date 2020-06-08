@@ -3,13 +3,25 @@ package org.cthulhu.azathoth.bootstrap;
 import org.cthulhu.azathoth.commons.Therapy_Costants;
 import org.cthulhu.azathoth.domains.*;
 import org.cthulhu.azathoth.repositories.*;
-import org.joda.time.LocalDateTime;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 @Component
 public class BootstrapData implements CommandLineRunner {
+
+    private Block block1;
+    private Slot a1;
+    private Owner owner1;
+    private Pet pet1;
+    private Folder folder1;
+    private Therapy onceADay;
+    private Therapy twiceADay;
+    private Therapy threeTimesADay;
+    private Therapy plasil;
 
     private final BlockRepository blockRepository;
     private final SlotRepository slotRepository;
@@ -33,10 +45,10 @@ public class BootstrapData implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // Block 1
-        Block block1 = new Block("Block 1", "Degenza", "3x2");
+        block1 = new Block("Block 1", "Degenza", "3x2");
         blockRepository.save(block1);
         // Slot A1
-        Slot a1 = new Slot("a1", 1, true, true);
+        a1 = new Slot("a1", 1, true, true);
         a1.setBlock(block1);
         slotRepository.save(a1);
         block1.getSlots().add(a1);
@@ -71,20 +83,33 @@ public class BootstrapData implements CommandLineRunner {
         blockRepository.save(block2);
 
         // Pet 1
-        Pet pet1 = new Pet("Tiffany", "Cane", "Barbone", "5",
+        addPet1();
+
+        // Folder 1
+        addFolder1();
+
+        // Therapy
+        addTherapy();
+
+    }
+
+    private void addPet1() {
+        owner1 = new Owner("Lorenzon", "Serena", "000000", "");
+        ownerRepository.save(owner1);
+        pet1 = new Pet("Tiffany", "Cane", "Barbone", "5",
                 "Femmina", false, 5.0f, "");
         petRepository.save(pet1);
-        Owner owner1 = new Owner("Lorenzon", "Serena", "000000", "");
-        owner1.setPet(pet1);
-        ownerRepository.save(owner1);
         pet1.setOwner(owner1);
+        owner1.getPets().add(pet1);
+        ownerRepository.save(owner1);
         a1.setPet(pet1);
         slotRepository.save(a1);
         pet1.setSlot(a1);
         petRepository.save(pet1);
+    }
 
-        // Folder 1
-        Folder folder1 = new Folder(LocalDateTime.now(), false);
+    private void addFolder1() {
+        folder1 = new Folder(LocalDate.now(), LocalTime.now(), false);
         folder1.setPet(pet1);
         folder1.setSlot(a1);
         folder1.setBlock(block1);
@@ -95,36 +120,43 @@ public class BootstrapData implements CommandLineRunner {
         slotRepository.save(a1);
         block1.getFolders().add(folder1);
         blockRepository.save(block1);
+    }
 
-        // Therapy
-        Therapy onceADay = new Therapy("Enrofloxacina", 5f, "mg/kg",
+    private void addTherapy() {
+        onceADay = new Therapy("Enrofloxacina", 5f, "mg/kg",
                 "Xeden",
                 50f, "mg/ml",
                 Therapy_Costants.SID,
-                (new LocalDateTime(2020, 5, 31, 10, 30))
+                LocalDate.of(2020, 5, 31),
+                LocalTime.of(10, 30)
+
         );
         onceADay.setFolder(folder1);
         onceADay.setPet(pet1);
         therapyRepository.save(onceADay);
-        Therapy twiceADay = new Therapy("Amoxicillina", 10f, "mg/kg",
+        twiceADay = new Therapy("Amoxicillina", 10f, "mg/kg",
                 "Synulox", 500f, "mg/ml",
                 Therapy_Costants.BID,
-                new LocalDateTime(2020, 05, 31, 10, 30));
+                LocalDate.of(2020, 5,31),
+                LocalTime.of(10, 30));
         twiceADay.setFolder(folder1);
         twiceADay.setPet(pet1);
         therapyRepository.save(twiceADay);
-        Therapy threeTimesADay = new Therapy("Tobramicina", 1f, "gtt",
+        threeTimesADay = new Therapy("Tobramicina", 1f, "gtt",
                 "Stilbiotic", 0f, "",
                 Therapy_Costants.TID,
-                new LocalDateTime(2020, 06, 01, 18, 30));
+                LocalDate.of(2020,6,1),
+                LocalTime.of(18,30));
         threeTimesADay.setFolder(folder1);
         threeTimesADay.setPet(pet1);
         therapyRepository.save(threeTimesADay);
-        Therapy plasil = new Therapy("Metoclopramide", 0.4f, "mg/kg",
+        plasil = new Therapy("Metoclopramide", 0.4f, "mg/kg",
                 "Vomend",
                 10f, "mg/ml", Therapy_Costants.TID,
-                new LocalDateTime(2020, 06, 01, 10, 30));
+                LocalDate.of(2020, 6,1),
+                LocalTime.of(10, 30));
         plasil.setFolder(folder1);
         plasil.setPet(pet1);
+        therapyRepository.save(plasil);
     }
 }

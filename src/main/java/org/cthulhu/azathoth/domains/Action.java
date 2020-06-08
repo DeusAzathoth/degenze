@@ -15,6 +15,9 @@ public class Action {
     private LocalDateTime time;
 
     @ManyToOne
+    private Folder folder;
+
+    @ManyToOne
     private Therapy therapy;
 
     @ManyToOne
@@ -44,6 +47,14 @@ public class Action {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public Folder getFolder() {
+        return folder;
+    }
+
+    public void setFolder(Folder folder) {
+        this.folder = folder;
     }
 
     public Therapy getTherapy() {

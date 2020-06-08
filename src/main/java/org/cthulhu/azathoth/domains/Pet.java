@@ -23,23 +23,23 @@ public class Pet {
     private float weight;
     private String notes;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "block_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "block_id", referencedColumnName = "id")
     private Block block;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "slot_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "slot_id", referencedColumnName = "id")
     private Slot slot;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Owner owner;
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Folder> folders = new ArrayList<>();
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "creator_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private User creator;
     private LocalDateTime creation;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "alterator_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "alterator_id", referencedColumnName = "id")
     private User last_mod_author;
     private LocalDateTime last_mod;
 

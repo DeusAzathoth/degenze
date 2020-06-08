@@ -1,9 +1,11 @@
 package org.cthulhu.azathoth.domains;
 
 import org.cthulhu.azathoth.security.domains.User;
-import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,19 +18,22 @@ public class Folder {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private User creator;
-    private LocalDateTime begin;
+    private LocalDate begin_day;
+    private LocalTime begin_time;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "alterator_id", referencedColumnName = "id")
     private User last_mod_author;
-    private LocalDateTime last_mod;
+    private LocalDate last_mod_day;
+    private LocalTime last_mod_time;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "closer_id", referencedColumnName = "id")
     private User closer;
     private boolean closed;
-    private LocalDateTime end;
+    private LocalDate end_day;
+    private LocalTime end_time;
 
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Therapy> therapies;
+    private List<Therapy> therapies = new ArrayList<>();
 
     @ManyToOne
     private Pet pet;
@@ -40,12 +45,13 @@ public class Folder {
     private Block block;
 
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Action> actions;
+    private List<Action> actions = new ArrayList<>();
 
     public Folder() {}
 
-    public Folder(LocalDateTime begin, boolean closed) {
-        this.begin = begin;
+    public Folder(LocalDate begin_day, LocalTime begin_time, boolean closed) {
+        this.begin_day = begin_day;
+        this.begin_time = begin_time;
         this.closed = closed;
     }
 
@@ -57,12 +63,20 @@ public class Folder {
         this.id = id;
     }
 
-    public LocalDateTime getBegin() {
-        return begin;
+    public LocalDate getBegin_day() {
+        return begin_day;
     }
 
-    public void setBegin(LocalDateTime begin) {
-        this.begin = begin;
+    public void setBegin_day(LocalDate begin_day) {
+        this.begin_day = begin_day;
+    }
+
+    public LocalTime getBegin_time() {
+        return begin_time;
+    }
+
+    public void setBegin_time(LocalTime begin_time) {
+        this.begin_time = begin_time;
     }
 
     public boolean isClosed() {
@@ -73,12 +87,20 @@ public class Folder {
         this.closed = closed;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    public LocalDate getLast_mod_day() {
+        return last_mod_day;
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setLast_mod_day(LocalDate last_mod_day) {
+        this.last_mod_day = last_mod_day;
+    }
+
+    public LocalTime getLast_mod_time() {
+        return last_mod_time;
+    }
+
+    public void setLast_mod_time(LocalTime last_mod_time) {
+        this.last_mod_time = last_mod_time;
     }
 
     public List<Therapy> getTherapies() {
@@ -129,12 +151,20 @@ public class Folder {
         this.last_mod_author = last_mod_author;
     }
 
-    public LocalDateTime getLast_mod() {
-        return last_mod;
+    public LocalDate getEnd_day() {
+        return end_day;
     }
 
-    public void setLast_mod(LocalDateTime last_mod) {
-        this.last_mod = last_mod;
+    public void setEnd_day(LocalDate end_day) {
+        this.end_day = end_day;
+    }
+
+    public LocalTime getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(LocalTime end_time) {
+        this.end_time = end_time;
     }
 
     public User getCloser() {
@@ -173,15 +203,20 @@ public class Folder {
         return "Folder{" +
                 "id=" + id +
                 ", creator=" + creator +
-                ", begin=" + begin +
+                ", begin_day=" + begin_day +
+                ", begin_time=" + begin_time +
                 ", last_mod_author=" + last_mod_author +
-                ", last_mod=" + last_mod +
+                ", last_mod_day=" + last_mod_day +
+                ", last_mod_time=" + last_mod_time +
                 ", closer=" + closer +
                 ", closed=" + closed +
-                ", end=" + end +
+                ", end_day=" + end_day +
+                ", end_time=" + end_time +
+                ", therapies=" + therapies +
                 ", pet=" + pet +
                 ", slot=" + slot +
                 ", block=" + block +
+                ", actions=" + actions +
                 '}';
     }
 }

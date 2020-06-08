@@ -4,6 +4,8 @@ import org.cthulhu.azathoth.security.domains.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Owner {
@@ -18,14 +20,14 @@ public class Owner {
     private String notes;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Pet pet;
+    private List<Pet> pets = new ArrayList<>();
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "creator_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private User creator;
     private LocalDateTime creation;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "alterator_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "alterator_id", referencedColumnName = "id")
     private User last_mod_author;
     private LocalDateTime last_mod;
 
@@ -78,12 +80,12 @@ public class Owner {
         this.notes = notes;
     }
 
-    public Pet getPet() {
-        return pet;
+    public List<Pet> getPets() {
+        return pets;
     }
 
-    public void setPet(Pet pet) {
-        this.pet = pet;
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
     }
 
     public User getCreator() {
@@ -141,7 +143,7 @@ public class Owner {
                 ", name='" + name + '\'' +
                 ", contact='" + contact + '\'' +
                 ", notes='" + notes + '\'' +
-                ", pet=" + pet +
+                ", pets=" + pets +
                 ", creator=" + creator +
                 ", creation=" + creation +
                 ", last_mod_author=" + last_mod_author +

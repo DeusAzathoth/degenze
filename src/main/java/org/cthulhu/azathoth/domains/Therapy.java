@@ -1,9 +1,11 @@
 package org.cthulhu.azathoth.domains;
 
 import org.cthulhu.azathoth.security.domains.User;
-import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +22,10 @@ public class Therapy {
     private float concentration;
     private String concentration_um;
     private String frequency;
-    private LocalDateTime begin;
-    private LocalDateTime end;
+    private LocalDate begin_day;
+    private LocalTime begin_time;
+    private LocalDate end_day;
+    private LocalTime end_time;
 
     @ManyToOne
     private Folder folder;
@@ -31,20 +35,21 @@ public class Therapy {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private User creator;
-    private LocalDateTime creation;
+    private LocalDate creation_day;
+    private LocalTime creation_time;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "alterator_id", referencedColumnName = "id")
     private User last_mod_author;
-    private LocalDateTime last_mod;
+    private LocalDate last_mod_day;
+    private LocalTime last_mod_time;
 
     @OneToMany(mappedBy = "therapy", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Action> actions;
+    private List<Action> actions = new ArrayList<>();
 
     public Therapy() {}
 
-    public Therapy(String active_sub, float dose, String dose_um, String name,
-                   float concentration, String concentration_um, String frequency,
-                   LocalDateTime begin) {
+    public Therapy(String active_sub, float dose, String dose_um, String name, float concentration,
+                   String concentration_um, String frequency, LocalDate begin_day, LocalTime begin_time) {
         this.active_sub = active_sub;
         this.dose = dose;
         this.dose_um = dose_um;
@@ -52,7 +57,8 @@ public class Therapy {
         this.concentration = concentration;
         this.concentration_um = concentration_um;
         this.frequency = frequency;
-        this.begin = begin;
+        this.begin_day = begin_day;
+        this.begin_time = begin_time;
     }
 
     public Long getId() {
@@ -119,20 +125,36 @@ public class Therapy {
         this.frequency = frequency;
     }
 
-    public LocalDateTime getBegin() {
-        return begin;
+    public LocalDate getBegin_day() {
+        return begin_day;
     }
 
-    public void setBegin(LocalDateTime begin) {
-        this.begin = begin;
+    public void setBegin_day(LocalDate begin_day) {
+        this.begin_day = begin_day;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    public LocalTime getBegin_time() {
+        return begin_time;
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setBegin_time(LocalTime begin_time) {
+        this.begin_time = begin_time;
+    }
+
+    public LocalDate getEnd_day() {
+        return end_day;
+    }
+
+    public void setEnd_day(LocalDate end_day) {
+        this.end_day = end_day;
+    }
+
+    public LocalTime getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(LocalTime end_time) {
+        this.end_time = end_time;
     }
 
     public Folder getFolder() {
@@ -159,12 +181,20 @@ public class Therapy {
         this.creator = creator;
     }
 
-    public LocalDateTime getCreation() {
-        return creation;
+    public LocalDate getCreation_day() {
+        return creation_day;
     }
 
-    public void setCreation(LocalDateTime creation) {
-        this.creation = creation;
+    public void setCreation_day(LocalDate creation_day) {
+        this.creation_day = creation_day;
+    }
+
+    public LocalTime getCreation_time() {
+        return creation_time;
+    }
+
+    public void setCreation_time(LocalTime creation_time) {
+        this.creation_time = creation_time;
     }
 
     public User getLast_mod_author() {
@@ -175,12 +205,20 @@ public class Therapy {
         this.last_mod_author = last_mod_author;
     }
 
-    public LocalDateTime getLast_mod() {
-        return last_mod;
+    public LocalDate getLast_mod_day() {
+        return last_mod_day;
     }
 
-    public void setLast_mod(LocalDateTime last_mod) {
-        this.last_mod = last_mod;
+    public void setLast_mod_day(LocalDate last_mod_day) {
+        this.last_mod_day = last_mod_day;
+    }
+
+    public LocalTime getLast_mod_time() {
+        return last_mod_time;
+    }
+
+    public void setLast_mod_time(LocalTime last_mod_time) {
+        this.last_mod_time = last_mod_time;
     }
 
     public List<Action> getActions() {
@@ -217,14 +255,19 @@ public class Therapy {
                 ", concentration=" + concentration +
                 ", concentration_um='" + concentration_um + '\'' +
                 ", frequency='" + frequency + '\'' +
-                ", begin=" + begin +
-                ", end=" + end +
+                ", begin_day=" + begin_day +
+                ", begin_time=" + begin_time +
+                ", end_day=" + end_day +
+                ", end_time=" + end_time +
                 ", folder=" + folder +
                 ", pet=" + pet +
                 ", creator=" + creator +
-                ", creation=" + creation +
+                ", creation_day=" + creation_day +
+                ", creation_time=" + creation_time +
                 ", last_mod_author=" + last_mod_author +
-                ", last_mod=" + last_mod +
+                ", last_mod_day=" + last_mod_day +
+                ", last_mod_time=" + last_mod_time +
+                ", actions=" + actions +
                 '}';
     }
 }
